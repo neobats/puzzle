@@ -5,9 +5,8 @@ module.exports = {
     "prettier",
     "prettier/@typescript-eslint",
     "react-app",
-    "plugin:prettier/recommended",
   ],
-  plugins: ["@typescript-eslint", "react", "react-native"],
+  plugins: ["prettier", "@typescript-eslint", "react", "react-native",],
   rules: {
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],

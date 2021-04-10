@@ -1,0 +1,1 @@
+export type PuzzleState = "WillTransitionIn" | "DidTransitionOut" | "DidTransitionIn"
