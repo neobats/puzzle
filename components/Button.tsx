@@ -1,66 +1,55 @@
-import {
-  Animated,
-  ColorPropType,
-  Easing,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react"
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
+import { Func } from "../types"
 
-const getValue = (pressed, disabled) => {
-  const base = disabled ? 0.5 : 1;
-  const delta = disabled ? 0.1 : 0.3;
+const getValue = (pressed: boolean, disabled: boolean) => {
+  const base = disabled ? 0.5 : 1
+  const delta = disabled ? 0.1 : 0.3
 
-  return pressed ? base - delta : base;
-};
+  return pressed ? base - delta : base
+}
 
-export default class Button extends React.Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    onPress: PropTypes.func,
-    disabled: PropTypes.bool,
-    height: PropTypes.number,
-    color: ColorPropType,
-    fontSize: PropTypes.number,
-    borderRadius: PropTypes.number,
-  };
+type Props = {
+  title: string
+  onPress: Func
+  disabled?: boolean
+  height?: number
+  color?: string
+  fontSize?: number
+  borderRadius?: number
+}
 
-  static defaultProps = {
-    onPress: () => {},
-    disabled: false,
-    height: null,
-    color: '#0CE1C2',
-    fontSize: 24,
-    borderRadius: 100,
-  };
+export const Button: React.FC<Props> = ({ title, height }) => {
+  return (
+    <TouchableWithoutFeedback>
+      <View style={[styles.container, { height }]}>
+        <Text>{title}</Text>
+      </View>
+    </TouchableWithoutFeedback>
+  )
+}
 
-  render() {
-    const { title, height } = this.props;
-
-    return (
-      <TouchableWithoutFeedback>
-        <View style={[styles.container, { height }]}>
-          <Text>{title}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  }
+Button.defaultProps = {
+  onPress: () => {
+    return
+  },
+  disabled: false,
+  color: "#0CE1C2",
+  fontSize: 24,
+  borderRadius: 100,
 }
 
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
     paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#1F1E2A',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#1F1E2A",
     borderWidth: 2,
   },
   title: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     fontSize: 24,
   },
-});
+})

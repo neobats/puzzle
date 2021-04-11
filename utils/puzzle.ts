@@ -1,48 +1,45 @@
-import { Puzzle } from "../types/Puzzle";
+import { Puzzle } from "../types/Puzzle"
 
 function range(max: number) {
-  const array = [];
+  const array = []
 
   for (let i = 0; i < max; i++) {
-    array[i] = i;
+    array[i] = i
   }
 
-  return array;
+  return array
 }
 
 export function createPuzzle(size: number) {
-  const board = range(size * size);
+  const board = range(size * size)
 
   const puzzle: Puzzle = {
     size,
     board,
     empty: Math.floor(Math.random() * (size * size - 1)),
-  };
+  }
 
-  return shuffleBoard(puzzle);
+  return shuffleBoard(puzzle)
 }
 
 function shuffleBoard(puzzle: Puzzle) {
-  let previous = -100;
+  let previous = -100
 
   for (let i = 0; i < 1000; i++) {
-    const moves = movableSquares(puzzle).filter(
-      square => square !== previous,
-    );
-    const square =
-      moves[Math.floor(Math.random() * (moves.length - 1))];
+    const moves = movableSquares(puzzle).filter((square) => square !== previous)
+    const square = moves[Math.floor(Math.random() * (moves.length - 1))]
 
-    puzzle = move(puzzle, square);
-    previous = square;
+    puzzle = move(puzzle, square)
+    previous = square
   }
 
-  return puzzle;
+  return puzzle
 }
 
 export function movableSquares(puzzle: Puzzle) {
-  const { size, board, empty } = puzzle;
+  const { size, board, empty } = puzzle
 
-  const emptyIndex = getIndex(puzzle, empty);
+  const emptyIndex = getIndex(puzzle, empty)
 
   const adjacent = [
     emptyIndex - size,
@@ -50,54 +47,54 @@ export function movableSquares(puzzle: Puzzle) {
     emptyIndex % size !== 0 ? emptyIndex - 1 : null,
     emptyIndex % size !== size - 1 ? emptyIndex + 1 : null,
   ]
-    .filter(
-      index => index !== null && index >= 0 && index < size * size,
-    )
-    .map(index => board[index as number]);
+    .filter((index) => index !== null && index >= 0 && index < size * size)
+    .map((index) => board[index as number])
 
-  return adjacent;
+  return adjacent
 }
 
 export function availableMove(puzzle: Puzzle, square: number) {
-  const { size, empty } = puzzle;
+  const { size, empty } = puzzle
 
-  const squareIndex = getIndex(puzzle, square);
-  const emptyIndex = getIndex(puzzle, empty);
+  const squareIndex = getIndex(puzzle, square)
+  const emptyIndex = getIndex(puzzle, empty)
 
-  const canMove = movableSquares(puzzle).includes(square);
+  const canMove = movableSquares(puzzle).includes(square)
 
-  if (canMove && squareIndex - size === emptyIndex) return 'up';
-  if (canMove && squareIndex + size === emptyIndex) return 'down';
-  if (canMove && squareIndex - 1 === emptyIndex) return 'left';
-  if (canMove && squareIndex + 1 === emptyIndex) return 'right';
+  if (canMove && squareIndex - size === emptyIndex) return "up"
+  if (canMove && squareIndex + size === emptyIndex) return "down"
+  if (canMove && squareIndex - 1 === emptyIndex) return "left"
+  if (canMove && squareIndex + 1 === emptyIndex) return "right"
 
-  return 'none';
+  return "none"
 }
 
-export const  getIndex = (puzzle: Puzzle, square: number) => puzzle.board.indexOf(square);
+export const getIndex = (puzzle: Puzzle, square: number) =>
+  puzzle.board.indexOf(square)
 
-export function move(puzzle: Puzzle, square: number) {
-  const { board, empty } = puzzle;
+export function move(puzzle: Puzzle, square: number): Puzzle {
+  const { board, empty } = puzzle
 
-  const squareIndex = getIndex(puzzle, square);
-  const emptyIndex = getIndex(puzzle, empty);
+  const squareIndex = getIndex(puzzle, square)
+  const emptyIndex = getIndex(puzzle, empty)
 
-  const copy = board.slice();
-  copy[emptyIndex] = board[squareIndex];
-  copy[squareIndex] = board[emptyIndex];
+  const copy = board.slice()
+  copy[emptyIndex] = board[squareIndex]
+  copy[squareIndex] = board[emptyIndex]
 
   return {
     ...puzzle,
     board: copy,
-  };
+  }
 }
 
-export const isSolved = (puzzle: Puzzle) => puzzle.board.every((square, index) => square === index);
+export const isSolved = (puzzle: Puzzle) =>
+  puzzle.board.every((square, index) => square === index)
 
 export function print(puzzle: Puzzle) {
-  const { size, board } = puzzle;
+  const { size, board } = puzzle
 
   for (let i = 0; i < size; i++) {
-    console.log(board.slice(i * size, (i + 1) * size).join(', '));
+    console.log(board.slice(i * size, (i + 1) * size).join(", "))
   }
 }

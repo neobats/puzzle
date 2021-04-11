@@ -1,51 +1,36 @@
-import {
-  Animated,
-  StyleSheet,
-  View,
-  LayoutAnimation,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react"
+import { StyleSheet } from "react-native"
 
-import Button from '../components/Button';
-import Logo from '../components/Logo';
-import Toggle from '../components/Toggle';
-import configureTransition from '../utils/configureTransition';
-import sleep from '../utils/sleep';
+type GameStartState = "Launching" | "WillTransitionIn" | "WillTransitionOut"
 
-const State = {
-  Launching: 'Launching',
-  WillTransitionIn: 'WillTransitionIn',
-  WillTransitionOut: 'WillTransitionOut',
-};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const BOARD_SIZES = [3, 4, 5, 6]
 
-const BOARD_SIZES = [3, 4, 5, 6];
-
-export default class Start extends React.Component {
-  static propTypes = {
-    onChangeSize: PropTypes.func.isRequired,
-    onStartGame: PropTypes.func.isRequired,
-    size: PropTypes.number.isRequired,
-  };
-
-  state = {
-    transitionState: State.Launching,
-  };
-
-  render() {
-    return null;
-  }
+type Props = {
+  onChangeSize: () => void
+  onStartGame: () => void
+  size: number
 }
 
+export const Start: React.FC<Props> = (_props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const state: { transitionState: GameStartState } = {
+    transitionState: "Launching",
+  }
+
+  return null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
     paddingVertical: 20,
   },
   logo: {
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     paddingHorizontal: 40,
   },
-});
+})

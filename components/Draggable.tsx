@@ -1,24 +1,15 @@
-import { PanResponder } from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react"
 
-export default class Draggable extends React.Component {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    onTouchStart: PropTypes.func,
-    onTouchMove: PropTypes.func,
-    onTouchEnd: PropTypes.func,
-    enabled: PropTypes.bool,
-  };
+type Props = {
+  onTouchStart?: (v: unknown) => void
+  onTouchMove?: (v: unknown) => void
+  onTouchEnd?: (v: unknown) => void
+  enabled?: boolean
+}
 
-  static defaultProps = {
-    onTouchStart: () => {},
-    onTouchMove: () => {},
-    onTouchEnd: () => {},
-    enabled: true,
-  };
-
-  render() {
-    return null;
-  }
+export const Draggable: React.FC<Props> = (props) => {
+  return null
+}
+Draggable.defaultProps = {
+  enabled: true,
 }

@@ -1,79 +1,58 @@
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  StyleSheet,
-  View,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from "react"
+import { StyleSheet } from "react-native"
+import { ImageSource, Puzzle } from "../types"
+import { isSolved, movableSquares, move } from "../utils/puzzle"
 
-import { move, movableSquares, isSolved } from '../utils/puzzle';
-import Board from '../components/Board';
-import Button from '../components/Button';
-import PuzzlePropType from '../validators/PuzzlePropType';
-import Preview from '../components/Preview';
-import Stats from '../components/Stats';
-import configureTransition from '../utils/configureTransition';
+type Props = {
+  puzzle: Puzzle
+  image: ImageSource
+  onChange: (val: unknown) => void
+  onQuit: (val: unknown) => void
+}
 
-const State = {
-  LoadingImage: 'LoadingImage',
-  WillTransitionIn: 'WillTransitionIn',
-  RequestTransitionOut: 'RequestTransitionOut',
-  WillTransitionOut: 'WillTransitionOut',
-};
+export const Game: React.FC<Props> = ({ puzzle, onChange }) => {
+  const [moves, setMoves] = useState(0)
+  const [previousMove, setPreviousMove] = useState(-100)
 
-export default class Game extends React.Component {
-  static propTypes = {
-    puzzle: PuzzlePropType.isRequired,
-    image: Image.propTypes.source,
-    onChange: PropTypes.func.isRequired,
-    onQuit: PropTypes.func.isRequired,
-  };
+  const requestTransitionOut = () => {
+    return
+  }
 
-  static defaultProps = {
-    image: null,
-  };
+  const handlePressSquare = (square: number) => {
+    if (!movableSquares(puzzle).includes(square)) return
 
-  handlePressSquare = square => {
-    const { puzzle, onChange } = this.props;
-    const { moves } = this.state;
+    const updated = move(puzzle, square)
 
-    if (!movableSquares(puzzle).includes(square)) return;
+    setMoves(moves + 1)
+    setPreviousMove(square)
 
-    const updated = move(puzzle, square);
-
-    this.setState({ moves: moves + 1, previousMove: square });
-
-    onChange(updated);
+    onChange(updated)
 
     if (isSolved(updated)) {
-      this.requestTransitionOut();
+      requestTransitionOut()
     }
-  };
-
-  render() {
-    return null;
   }
+
+  return null
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   centered: {
     flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
     marginBottom: 10,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingLeft: 10,
     paddingRight: 16,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
   },
-});
+})

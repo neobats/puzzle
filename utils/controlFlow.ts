@@ -1,56 +1,41 @@
-/**
- * Execute a promise-returning function. If the promise isn't resolved or
- * rejected in `ms` milliseconds, the promise is rejected.
- *
- * @param {number} ms Timeout after this many milliseconds
- * @param {function} f Function that returns a promise
- * @returns {Promise}
- */
-export async function timeout(ms, f) {
-  const promise = f();
+export async function timeout<T extends unknown = unknown>(
+  ms: number,
+  f: () => Promise<T>,
+): Promise<T> {
+  const promise = f()
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(new Error('timeout'));
-    }, ms);
+      reject(new Error("timeout"))
+    }, ms)
 
-    promise.then(resolve, reject);
-  });
+    promise.then(resolve, reject)
+  })
 }
 
-/**
- * Execute a promise-returning function. If the promise is rejected, retry the
- * function call `count` times.
- *
- * @param {number} count Number of times to retry
- * @param {function} f Function that returns a promise
- * @returns {Promise}
- */
-export async function retry(count, f) {
+export async function retry<T extends unknown = unknown>(
+  count: number,
+  f: () => Promise<T>,
+): Promise<T> {
   if (count > 0) {
     try {
-      return await f();
+      return await f()
     } catch (e) {
-      return retry(count - 1, f);
+      return retry(count - 1, f)
     }
   }
 
-  return Promise.reject();
+  return Promise.reject()
 }
 
-/**
- * @typedef {{retry: number, timeout: number}} ControlFlowOptions
- */
+type ControlFlowOptions = {
+  retry: number
+  timeout: number
+}
 
-/**
- * Execute a promise-returning function.
- *
- * @param {ControlFlowOptions} options Invocation options
- * @param {function} f Function that returns a promise
- * @returns {Promise}
- */
-export async function invoke(options, f) {
-  return retry(options.retry || 1, () =>
-    timeout(options.timeout || 0, f),
-  );
+export async function invoke<T extends unknown = unknown>(
+  options: ControlFlowOptions,
+  f: () => Promise<T>,
+) {
+  return retry(options.retry || 1, () => timeout(options.timeout || 0, f))
 }

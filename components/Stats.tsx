@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react"
+import { StyleSheet, Text, View } from "react-native"
+import { formatElapsedTime } from "../utils"
 
-import formatElapsedTime from '../utils/formatElapsedTime';
+type Props = {
+  time: number
+  moves: number
+}
 
-export default function Stats({ time, moves }) {
+export const Stats: React.FC<Props> = ({ time, moves }) => {
   return (
     <View style={styles.container}>
       <View style={styles.labels}>
@@ -15,40 +18,33 @@ export default function Stats({ time, moves }) {
         <Text style={[styles.text, styles.textMargin, styles.value]}>
           {formatElapsedTime(time)}
         </Text>
-        <Text style={[styles.text, styles.value]}>
-          {moves.toString()}
-        </Text>
+        <Text style={[styles.text, styles.value]}>{moves.toString()}</Text>
       </View>
     </View>
-  );
+  )
 }
-
-Stats.propTypes = {
-  time: PropTypes.number.isRequired,
-  moves: PropTypes.number.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   labels: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     marginRight: 15,
   },
   values: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     minWidth: 56,
   },
   text: {
     fontSize: 24,
-    color: '#69B8FF',
-    backgroundColor: 'transparent',
+    color: "#69B8FF",
+    backgroundColor: "transparent",
   },
   value: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   textMargin: {
     marginBottom: 10,
   },
-});
+})

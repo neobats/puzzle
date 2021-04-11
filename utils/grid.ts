@@ -1,49 +1,30 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions, PixelRatio } from "react-native"
 
-export const itemMargin = 4;
+export const itemMargin = 4
 
-export const containerPadding = 6;
+export const containerPadding = 6
 
-/**
- * Calculate the width of the grid, based on screen dimensions.
- *
- * @returns {number} The width of the grid
- */
+const calculatePadding = (itemSize: number) => (toFloor: number) =>
+  containerPadding + Math.floor(toFloor) * (itemSize + itemMargin)
+
 export function calculateContainerSize() {
-  return Dimensions.get('window').width - 20;
+  return Dimensions.get("window").width - 20
 }
 
-/**
- * Calculate the size of each item, based on column count
- *
- * @param {number} columns The number of columns
- * @returns {number} The width of the grid
- */
-export function calculateItemSize(columns) {
+export function calculateItemSize(columns: number) {
   return PixelRatio.roundToNearestPixel(
     (calculateContainerSize() -
       containerPadding * 2 -
       itemMargin * (columns - 1)) /
       columns,
-  );
+  )
 }
 
-/**
- * Calculate the position of each item
- *
- * @param {number} columns The number of columns
- * @param {number} index The index of the item
- * @returns {{top: number, left: number}} The item's position
- */
-export function calculateItemPosition(columns, index) {
-  const itemSize = calculateItemSize(columns);
-
+export function calculateItemPosition(columns: number, index: number) {
+  const itemSize = calculateItemSize(columns)
+  const calc = calculatePadding(itemSize)
   return {
-    top:
-      containerPadding +
-      Math.floor(index / columns) * (itemSize + itemMargin),
-    left:
-      containerPadding +
-      Math.floor(index % columns) * (itemSize + itemMargin),
-  };
+    top: calc(index / columns),
+    left: calc(index % columns),
+  }
 }

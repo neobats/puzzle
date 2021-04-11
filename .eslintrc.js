@@ -1,12 +1,31 @@
 module.exports = {
-  root: true,
+  env: {
+    browser: true,
+    node: true,
+    es2021: true,
+  },
   extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
     "prettier",
-    "prettier/@typescript-eslint",
-    "react-app",
   ],
-  plugins: ["prettier", "@typescript-eslint", "react", "react-native",],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 12,
+    sourceType: "module",
+  },
+  plugins: [
+    "react",
+    "react-native",
+    "prettier",
+    "react-hooks",
+    "@typescript-eslint",
+  ],
   rules: {
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
@@ -18,23 +37,11 @@ module.exports = {
         ignoreDeclarationSort: true,
       },
     ],
-    "import/export": "error",
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "never",
-        alphabetize: {
-          order: "asc",
-        },
-      },
-    ],
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
-    "import/no-useless-path-segments": "error",
+    "react/prop-types": "off"
   },
   settings: {
     react: {
-      version: "detect", // Tells eslint-plugin-react to automatically detect the version of React to use
+      version: "detect",
     },
   },
 }

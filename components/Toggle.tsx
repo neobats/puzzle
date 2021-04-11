@@ -1,10 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React from "react"
+import { StyleSheet, Text, View } from "react-native"
+import Button from "./Button"
 
-import Button from './Button';
+type Props = {
+  options: number[]
+  value: number
+  onChange: (v: number) => void
+}
 
-export default function Toggle({ options, value, onChange }) {
+export const Toggle: React.FC<Props> = ({ options, value, onChange }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Choose Size</Text>
@@ -13,7 +17,7 @@ export default function Toggle({ options, value, onChange }) {
           const style = {
             marginLeft: index % 2 === 1 ? 10 : 0,
             marginTop: index >= 2 ? 10 : 0,
-          };
+          }
 
           return (
             <View key={option} style={[styles.item, style]}>
@@ -21,32 +25,26 @@ export default function Toggle({ options, value, onChange }) {
                 title={option.toString()}
                 disabled={option !== value}
                 onPress={() => onChange(option)}
-                color={'#69B8FF'}
+                color={"#69B8FF"}
                 height={100}
                 fontSize={36}
                 borderRadius={12}
               />
             </View>
-          );
+          )
         })}
       </View>
     </View>
-  );
+  )
 }
-
-Toggle.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     width: 210,
   },
   item: {
@@ -55,8 +53,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     lineHeight: 24,
-    color: '#69B8FF',
-    backgroundColor: 'transparent',
+    color: "#69B8FF",
+    backgroundColor: "transparent",
     marginBottom: 20,
   },
-});
+})

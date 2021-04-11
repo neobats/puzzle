@@ -1,37 +1,35 @@
-import React from 'react';
-import {
-  StyleSheet
-} from 'react-native';
-import { Puzzle } from '../types';
+import React from "react"
+import { StyleSheet } from "react-native"
+import { Puzzle } from "../types"
 
 type Props = {
   puzzle: Puzzle
   teardown: boolean
-  image: { uri: string} | null
-  previousMove: number | null,
+  image: { uri: string } | null
+  previousMove: number | null
   onMoveSquare: () => void
   onTransitionIn: () => void
   onTransitionOut: () => void
-};
-
+}
 
 export const Board: React.FC<Props> = (_props) => {
-    return null;
+  return null
 }
 
 Board.defaultProps = {
   image: null,
-  previousMove: null
+  previousMove: null,
 }
 
-const _styles = StyleSheet.create({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const styles = StyleSheet.create({
   container: {
     padding: 6,
     borderRadius: 6,
-    backgroundColor: '#1F1E2A',
+    backgroundColor: "#1F1E2A",
   },
   title: {
     fontSize: 24,
-    color: '#69B8FF',
+    color: "#69B8FF",
   },
-});
+})
