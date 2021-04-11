@@ -2,12 +2,12 @@ import React from "react"
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
 import { Func } from "../types"
 
-const getValue = (pressed: boolean, disabled: boolean) => {
-  const base = disabled ? 0.5 : 1
-  const delta = disabled ? 0.1 : 0.3
+// const getValue = (pressed: boolean, disabled: boolean) => {
+//   const base = disabled ? 0.5 : 1
+//   const delta = disabled ? 0.1 : 0.3
 
-  return pressed ? base - delta : base
-}
+//   return pressed ? base - delta : base
+// }
 
 type Props = {
   title: string

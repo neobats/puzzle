@@ -9,8 +9,8 @@ import {
   StyleSheet,
   UIManager,
 } from "react-native"
-import Game from "./screens/Game"
-import Start from "./screens/Start"
+import { Game } from "./screens/Game"
+import { Start } from "./screens/Start"
 import { Puzzle } from "./types"
 import { getRandomImage } from "./utils/api"
 import { createPuzzle } from "./utils/puzzle"
@@ -24,7 +24,7 @@ if (
 
 const BACKGROUND_COLORS = ["#1B1D34", "#2A2A38"]
 
-export const App: React.FC = () => {
+const App: React.FC = () => {
   const [size, setSize] = useState(3)
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
   const [image, setImage] = useState<{ uri: string } | null>(null)
@@ -85,3 +85,5 @@ const styles = StyleSheet.create({
         : 0,
   },
 })
+
+export default App

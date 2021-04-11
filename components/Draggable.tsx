@@ -7,7 +7,7 @@ type Props = {
   enabled?: boolean
 }
 
-export const Draggable: React.FC<Props> = (props) => {
+export const Draggable: React.FC<Props> = (_props) => {
   return null
 }
 Draggable.defaultProps = {

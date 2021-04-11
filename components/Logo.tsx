@@ -1,12 +1,10 @@
 import React from "react"
-import { Image, StyleSheet } from "react-native"
+import { Image, ImageSourcePropType, StyleSheet } from "react-native"
 import logo from "../assets/logo.png"
 
-export default function Logo() {
-  return <Image style={styles.image} source={logo} />
+export function Logo() {
+  return <Image style={styles.image} source={logo as ImageSourcePropType} />
 }
-
-Logo.propTypes = {}
 
 const styles = StyleSheet.create({
   image: {

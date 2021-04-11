@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { Dispatch, SetStateAction, useState } from "react"
 import { StyleSheet } from "react-native"
 import { ImageSource, Puzzle } from "../types"
 import { isSolved, movableSquares, move } from "../utils/puzzle"
@@ -6,7 +7,7 @@ import { isSolved, movableSquares, move } from "../utils/puzzle"
 type Props = {
   puzzle: Puzzle
   image: ImageSource
-  onChange: (val: unknown) => void
+  onChange: Dispatch<SetStateAction<Puzzle | null>>
   onQuit: (val: unknown) => void
 }
 
