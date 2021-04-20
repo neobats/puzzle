@@ -7,9 +7,9 @@ type Props = {
   teardown: boolean
   image: { uri: string } | null
   previousMove: number | null
-  onMoveSquare: () => void
-  onTransitionIn: () => void
-  onTransitionOut: () => void
+  onMoveSquare?: () => void
+  onTransitionIn?: () => void
+  onTransitionOut?: () => void
 }
 
 export const Board: React.FC<Props> = (_props) => {

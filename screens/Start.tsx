@@ -1,9 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { LayoutAnimation, StyleSheet, View } from "react-native"
+import { Animated, StyleSheet, View } from "react-native"
 import { Button } from "../components/Button"
 import { Logo } from "../components/Logo"
 import { Toggle } from "../components/Toggle"
-import { Func } from "../types"
 import { configureTransition, sleep } from "../utils"
 
 type GameStartState = "Launching" | "WillTransitionIn" | "WillTransitionOut"
@@ -12,14 +11,17 @@ const BOARD_SIZES = [3, 4, 5, 6]
 
 type Props = {
   onChangeSize: Dispatch<SetStateAction<number>>
-  onStartGame: Func
+  onStartGame: () => void
   size: number
 }
 
-export const Start: React.FC<Props> = ({ size, onChangeSize }) => {
+export const Start: React.FC<Props> = ({ size, onStartGame, onChangeSize }) => {
   const [transitionState, setTransitionState] = useState<GameStartState>(
     "Launching",
   )
+
+  const toggleOpacity = new Animated.Value(0)
+  const buttonOpacity = new Animated.Value(0)
 
   useEffect(() => {
     const animate = async () => {
@@ -28,17 +30,32 @@ export const Start: React.FC<Props> = ({ size, onChangeSize }) => {
       // work for Android
       await configureTransition(() => setTransitionState("WillTransitionIn"))
 
-      const animation = LayoutAnimation.create(
-        750,
-        LayoutAnimation.Types.easeInEaseOut,
-        LayoutAnimation.Properties.opacity,
-      )
+      Animated.timing(toggleOpacity, {
+        toValue: 1,
+        duration: 500,
+        delay: 500,
+        useNativeDriver: true,
+      }).start(() => console.log("animated toggle"))
 
-      LayoutAnimation.configureNext(animation)
-      setTransitionState("WillTransitionIn")
+      Animated.timing(buttonOpacity, {
+        toValue: 1,
+        duration: 500,
+        delay: 1000,
+        useNativeDriver: true,
+      }).start(() => console.log("animated button"))
     }
     animate()
   }, [])
+
+  const [buttonStyle] = useState({ opacity: buttonOpacity })
+  const [toggleStyle] = useState({ opacity: toggleOpacity })
+
+  const handlePressStart = async () => {
+    await configureTransition(() => {
+      setTransitionState("WillTransitionOut")
+    })
+    onStartGame()
+  }
 
   return (
     <View style={styles.container}>
@@ -46,19 +63,18 @@ export const Start: React.FC<Props> = ({ size, onChangeSize }) => {
         <Logo />
       </View>
       {transitionState !== "Launching" && (
-        <View>
+        <Animated.View style={toggleStyle}>
           <Toggle options={BOARD_SIZES} value={size} onChange={onChangeSize} />
-        </View>
+        </Animated.View>
       )}
       {transitionState !== "Launching" && (
-        <View>
+        <Animated.View style={buttonStyle}>
           <Button
             title="Start Game"
-            onPress={() => {
-              return
-            }}
+            onPress={handlePressStart}
+            disabled={false}
           />
-        </View>
+        </Animated.View>
       )}
     </View>
   )

@@ -1,24 +1,79 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { Dispatch, SetStateAction, useState } from "react"
-import { StyleSheet } from "react-native"
-import { ImageSource, Puzzle } from "../types"
+import useInterval from "@use-it/interval"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { ActivityIndicator, Alert, View } from "react-native"
+import { Board } from "../components/Board"
+import { Button } from "../components/Button"
+import { Preview } from "../components/Preview"
+import { Stats } from "../components/Stats"
+import { GameState, ImageSource, Puzzle } from "../types"
+import { configureTransition } from "../utils"
 import { isSolved, movableSquares, move } from "../utils/puzzle"
 
 type Props = {
   puzzle: Puzzle
   image: ImageSource
   onChange: Dispatch<SetStateAction<Puzzle | null>>
-  onQuit: (val: unknown) => void
+  onQuit: (val?: unknown) => void
 }
 
-export const Game: React.FC<Props> = ({ puzzle, onChange }) => {
+export const Game: React.FC<Props> = ({ puzzle, image, onChange, onQuit }) => {
+  const startingState: GameState = image ? "WillTransitionIn" : "LoadingImage"
   const [moves, setMoves] = useState(0)
+  const [elapsed, setElapsed] = useState(0)
+  const [delay, setDelay] = useState<1000 | null>(null)
   const [previousMove, setPreviousMove] = useState(-100)
+  const [gameState, setGameState] = useState<GameState>(startingState)
+
+  // configure on mount
+  useEffect(() => {
+    configureTransition()
+  }, [])
+
+  useEffect(() => {
+    if (image && gameState === "LoadingImage") {
+      configureTransition(() => {
+        setGameState("WillTransitionIn")
+      })
+    }
+  }, [image, gameState])
+
+  // handle passage of time in elapsed
+  useInterval(() => {
+    setElapsed(elapsed + 1)
+  }, delay)
 
   const requestTransitionOut = () => {
-    return
+    setDelay(null)
+    setGameState("RequestTransitionOut")
   }
 
+  const handleBoardTransitionIn = () => {
+    setDelay(1000)
+  }
+
+  const handleBoardTransitionOut = async () => {
+    await configureTransition(() => {
+      setGameState("WillTransitionOut")
+    })
+    onQuit()
+  }
+
+  const handlePressQuit = () => {
+    Alert.alert(
+      "Quit",
+      "Do you want to quit and lose your progress on this puzzle?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Quit",
+          style: "destructive",
+          onPress: requestTransitionOut,
+        },
+      ],
+    )
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handlePressSquare = (square: number) => {
     if (!movableSquares(puzzle).includes(square)) return
 
@@ -34,7 +89,30 @@ export const Game: React.FC<Props> = ({ puzzle, onChange }) => {
     }
   }
 
-  return null
+  return (
+    gameState !== "WillTransitionOut" && (
+      <View style={styles.container}>
+        {gameState === "LoadingImage" && (
+          <ActivityIndicator size="large" color="rgba(255,255,255,0.5)" />
+        )}
+        {gameState !== "LoadingImage" && (
+          <View style={styles.centered}>
+            <View style={styles.header}>
+              <Preview image={image} boardSize={puzzle.size} />
+              <Stats moves={moves} time={elapsed} />
+            </View>
+            <Board
+              puzzle={puzzle}
+              image={image}
+              previousMove={previousMove}
+              teardown={gameState === "RequestTransitionOut"}
+            />
+            <Button title="Quit" onPress={handlePressQuit} disabled={false} />
+          </View>
+        )}
+      </View>
+    )
+  )
 }
 
 const styles = StyleSheet.create({
