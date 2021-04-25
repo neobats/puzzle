@@ -35,14 +35,14 @@ export const Start: React.FC<Props> = ({ size, onStartGame, onChangeSize }) => {
         duration: 500,
         delay: 500,
         useNativeDriver: true,
-      }).start(() => console.log("animated toggle"))
+      }).start()
 
       Animated.timing(buttonOpacity, {
         toValue: 1,
         duration: 500,
         delay: 1000,
         useNativeDriver: true,
-      }).start(() => console.log("animated button"))
+      }).start()
     }
     animate()
   }, [])
@@ -53,8 +53,8 @@ export const Start: React.FC<Props> = ({ size, onStartGame, onChangeSize }) => {
   const handlePressStart = async () => {
     await configureTransition(() => {
       setTransitionState("WillTransitionOut")
+      onStartGame()
     })
-    onStartGame()
   }
 
   return (

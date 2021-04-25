@@ -1,13 +1,12 @@
 import useInterval from "@use-it/interval"
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { ActivityIndicator, Alert, View } from "react-native"
+import { ActivityIndicator, Alert, StyleSheet, View } from "react-native"
 import { Board } from "../components/Board"
 import { Button } from "../components/Button"
 import { Preview } from "../components/Preview"
 import { Stats } from "../components/Stats"
 import { GameState, ImageSource, Puzzle } from "../types"
-import { configureTransition } from "../utils"
-import { isSolved, movableSquares, move } from "../utils/puzzle"
+import { configureTransition, isSolved, movableSquares, move } from "../utils"
 
 type Props = {
   puzzle: Puzzle
@@ -90,7 +89,7 @@ export const Game: React.FC<Props> = ({ puzzle, image, onChange, onQuit }) => {
   }
 
   return (
-    gameState !== "WillTransitionOut" && (
+    (gameState !== "WillTransitionOut" && (
       <View style={styles.container}>
         {gameState === "LoadingImage" && (
           <ActivityIndicator size="large" color="rgba(255,255,255,0.5)" />
@@ -106,12 +105,16 @@ export const Game: React.FC<Props> = ({ puzzle, image, onChange, onQuit }) => {
               image={image}
               previousMove={previousMove}
               teardown={gameState === "RequestTransitionOut"}
+              onMoveSquare={handlePressSquare}
+              onTransitionIn={handleBoardTransitionIn}
+              onTransitionOut={handleBoardTransitionOut}
             />
             <Button title="Quit" onPress={handlePressQuit} disabled={false} />
           </View>
         )}
       </View>
-    )
+    )) ||
+    null
   )
 }
 

@@ -22,6 +22,5 @@ export function configureTransition(
   })
 
   onConfigured()
-
   return promise
 }
